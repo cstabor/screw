@@ -1,0 +1,21 @@
+{
+		"name": "cstabor/screw",
+		"description": "some interest tool",
+		"keywords": ["tool", "util"],
+		"authors": [
+		{
+				"name": "cstabor",
+				"email": "cstabor@hotmail.com"
+		}
+		],
+				"type": "library",
+				"license": "MIT",
+				"require": {
+						"php": ">= 5.6.0",
+				},
+				"autoload": {
+						"files": [
+								"src/helper.php"
+								]
+				}
+}
