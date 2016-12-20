@@ -5,7 +5,7 @@ namespace Screw;
 class Str
 {
     /**
-     *  生成指定长度的随机字符串(包含大写英文字母, 小写英文字母, 数字)
+     * 生成指定长度的随机字符串(包含大写英文字母, 小写英文字母, 数字)
      *
      * @param int $length 需要生成的字符串的长度
      * @return string 包含 大小写英文字母 和 数字 的随机字符串
@@ -74,6 +74,7 @@ class Str
 
     /**
      * 将unicode转换成字符
+     *
      * @param int $unicode
      * @return string UTF-8字符
      **/
@@ -94,6 +95,7 @@ class Str
 
     /**
      * 将字符转换成unicode
+     *
      * @param string $char 必须是UTF-8字符
      * @return int
      **/
@@ -122,6 +124,7 @@ class Str
 
     /**
      * 半角转全角
+     *
      * @param string $str
      * @return string
      **/
@@ -138,6 +141,7 @@ class Str
 
     /**
      * 全角转半角
+     *
      * @param string $str
      * @return string
      **/
