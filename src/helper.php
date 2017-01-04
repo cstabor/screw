@@ -44,3 +44,22 @@ function array_random($arr, $num = 1) {
     }
     return $num === 1 ? $r[0] : $r;
 }
+
+/**
+ * support private property
+ *
+ * $param object $object
+ */
+function object_array($object) {
+    $public = [];
+    $reflection = new ReflectionClass($object);
+    foreach ($reflection->getProperties() as $property) {
+        $property->setAccessible(true);
+        if (is_object($property->getValue($object))) {
+            $public[$property->getName()] = call_user_func_array(__FUNCTION__, [$property->getValue($object)]);
+        } else {
+            $public[$property->getName()] = $property->getValue($object);
+        }
+    }
+    return $public;
+}
