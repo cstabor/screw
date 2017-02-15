@@ -30,11 +30,11 @@ function println($var, $return = false) {
 }
 
 /**
- * get random value
+ * get random
  *
  * @param $arr
  * @param int $num
- * @return array|mixed
+ * @return string|array
  */
 function array_random($arr, $num = 1) {
     shuffle($arr);
@@ -43,6 +43,16 @@ function array_random($arr, $num = 1) {
         $r[] = $arr[$i];
     }
     return $num === 1 ? $r[0] : $r;
+}
+
+/**
+ * get random value
+ * 
+ * @param array $arr
+ * @return string
+ */
+function array_random_value($arr) {
+    return $arr[array_rand($arr)];
 }
 
 /**

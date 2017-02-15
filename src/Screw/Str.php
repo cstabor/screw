@@ -23,13 +23,26 @@ class Str
      */
     public static function randomByCharsSpace($length, $charsSpace)
     {
-        $result = '';
-        $charsArray = str_split($charsSpace);
+        $res = '';
         for ($i = 0; $i < $length; $i++) {
-            $item = array_rand($charsArray);
-            $result .= $charsArray[$item];
+            $index = mt_rand(0, strlen($charsSpace) - 1);
+            $res .= $charsSpace[$index];
         }
-        return $result;
+        return $res;
+    }
+
+    /**
+     * get rand visual char string
+     * @param $length
+     *
+     * @return string
+     */
+    public static function random($length) {
+	$res = '';
+	for ($i = 0; $i < $length; $i++) {
+		$res .= chr(mt_rand(33, 126));
+	}
+	return $res;
     }
 
     /**
