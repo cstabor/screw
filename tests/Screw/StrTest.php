@@ -9,10 +9,11 @@
 namespace ScrewTest;
 
 
+use PHPUnit\Framework\TestCase;
 use Screw\Str;
 
 
-class StrTest extends \PHPUnit_Framework_TestCase
+class StrTest extends TestCase
 {
 
     public function testDBC() {
@@ -35,5 +36,18 @@ class StrTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expect, $result, 'name convert to SBC error');
 
     }
+    
+    public function testRandom()
+    {
+        
+        $len = 16;
+        
+        $str = Str::random($len);
+        
+        $this->assertEquals(16, strlen($str), 'random error');
+        println($str);
+        
+    }
+
 
 }
