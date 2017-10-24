@@ -4,6 +4,13 @@ namespace Screw;
 
 class Str
 {
+    
+    const DIGIT = '0123456789';
+    
+    const ALPHABET = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    
+    const SPECIAL_CHARS = '|@#~$%()=^*+[]{}-_';
+    
     /**
      * 生成指定长度的随机字符串(包含大写英文字母, 小写英文字母, 数字)
      *
@@ -12,22 +19,48 @@ class Str
      */
     public static function randomAlphabetAndDigit($length)
     {
-        $charsSpace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charsSpace = self::DIGIT.self::ALPHABET;
         return self::randomByCharsSpace($length, $charsSpace);
     }
     
     /**
+     * 减少循环次数，使用php原生函数，效率要比循环生成高
+     *
      * @param $length
-     * @param $charsSpace
+     * @return bool|string
+     */
+    public static function random62($length)
+    {
+        $str = self::DIGIT.self::ALPHABET;
+        
+        $strLength = 62;
+        while($length > $strLength){
+            $str .= $str;
+            $strLength += 60;
+        }
+        
+        $str = str_shuffle($str);
+        return substr($str, 0,$length);
+    }
+    
+    /**
+     * @param int $length
+     * @param string $charsSpace
      * @return string
      */
     public static function randomByCharsSpace($length, $charsSpace)
     {
-        $result = '';
+/*        $result = '';
         $charsArray = str_split($charsSpace);
         for ($i = 0; $i < $length; $i++) {
             $item = array_rand($charsArray);
             $result .= $charsArray[$item];
+        }
+        return $result;*/
+        $result = '';
+        $spaceLength = strlen($charsSpace);
+        for ($i = 0; $i < $length; $i++) {
+            $result .= $charsSpace[rand(0, $spaceLength-1)];
         }
         return $result;
     }
@@ -183,4 +216,63 @@ class Str
 //        return preg_replace("/(?:^|_)([a-z])/e", "strtoupper('\\1')", $underline);
         return preg_replace_callback("/(?:^|_)([a-z])/", "strtoupper", $underline);
     }
+    
+    /**
+     * 把字符按全角截短
+     *
+     * 不过滤html特殊符号,"\r"将被丢弃
+     *
+     * @param string $src
+     * @param int $len 全角字符数量,英文数字算半个
+     * @return string
+     */
+    public static function gbkTruncate($src, $len) {
+        $src = strval($src);
+        $dest = '';
+        $dest_len = 0;
+        $src_len = strlen($src);
+        for ($i=0;$i<$src_len && $dest_len < $len ; $i++) {
+            $ascii = ord($src[$i]);
+            
+            //单字节部分
+            if($ascii < 0x7F)		{
+                //控制字符特殊处理
+                if(ctype_cntrl($src[$i]) )	{
+                    //保留制表符跟回车符
+                    if($ascii==0x09 || $ascii==0x0A) {
+                        $dest .= $src[$i];
+                        $dest_len += 0.5;
+                    }
+                    //丢掉其它控制字符
+                }
+                //其它的补充上
+                else			{
+                    $dest .= $src[$i];
+                    $dest_len += 0.5;
+                }
+            }
+            //多字节部分,合法的第一个
+            elseif ($ascii >= 0x81 && $ascii<=0xFE)		{
+                //丢掉最后半个汉字
+                if (1 == ($src_len-$i))			{
+                    break;
+                }
+                //检查第二个字节
+                //0x40 - 0xFE
+                $b2 = ord($src[++$i]);
+                if($b2 >= 0x40 && $b2 <= 0xFE)			{
+                    //最后半个
+                    if ($dest_len+.5==$len) {
+                        break;
+                    }
+                    $dest .= $src[$i-1] . $src[$i];
+                    $dest_len += 1 ;
+                }
+                //不是gbk范围去掉
+            }
+            //不是gbk范围去掉
+        }
+        return $dest;
+    }
+    
 }
