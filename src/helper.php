@@ -9,19 +9,33 @@
  */
 function println($var, $return = false)
 {
-    
-    // (isset ($_SERVER ['HTTP_USER_AGENT']) && strpos($_SERVER ['HTTP_USER_AGENT'], 'curl') !== false)
-    if (PHP_SAPI === 'cli') {
-        if (is_scalar($var)) {
-            $val = sprintf("%s: %s".PHP_EOL, gettype($var), $var);
-        } else {
-            $val = print_r($var, true);
-            if (!$val) {
-                $val .= PHP_EOL;
+    if (is_null($var)) {
+        $val = sprintf("(NULL)");
+    } elseif (is_scalar($var)) {
+        if (is_bool($var)) {
+            if ($var) {
+                $val = sprintf("bool(true)");
+            } else {
+                $val = sprintf("bool(false)");
             }
+        } elseif (is_float($var)) {
+            $val = sprintf("%f", $var);
+        } elseif (is_integer($var)) {
+            $val = sprintf("%d", $var);
+        } elseif (is_string($var)) {
+            $val = sprintf("\"%s\"", $var);
+        } else {
+            $val = sprintf("untreated data: \"%s\"", $var);
         }
     } else {
-        $val = '<pre>' . print_r($var, true) . '</pre>';
+        $val = print_r($var, true);
+    }
+    
+    $val = trim($val);
+    if (PHP_SAPI === 'cli') {
+        $val .= PHP_EOL;
+    } else {
+        $val = sprintf("<pre>%s</pre>", $val);
     }
     
     if ($return) {
