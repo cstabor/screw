@@ -208,13 +208,48 @@ class Str
     /**
      * user_name -> UserName
      *
-     * @param $underline
+     * @param $underscore
      * @return string
      */
-    public static function underlineToCamel($underline)
+    public static function toUpperCamelCase($underscore)
     {
-//        return preg_replace("/(?:^|_)([a-z])/e", "strtoupper('\\1')", $underline);
-        return preg_replace_callback("/(?:^|_)([a-z])/", "strtoupper", $underline);
+        $hump = preg_replace_callback('/(?:^|_)([a-z])/', function($var) {
+            return strtoupper($var[1]);
+        }, $underscore);
+        return $hump;
+    }
+
+    /**
+     * user_name -> userName
+     *
+     * @param $underscore
+     * @return string
+     */
+    public static function toLowerCamelCase($underscore)
+    {
+        return lcfirst(self::toUpperCamelCase($underscore));
+    }
+
+    /**
+     * userName -> user_name
+     * @param string $name
+     * @return string
+     */
+    public static function toSnakeCase($name) {
+        $temp_array = array();
+        for($i=0;$i<strlen($name);$i++){
+            $ascii_code = ord($name[$i]);
+            if($ascii_code >= 65 && $ascii_code <= 90){
+                if($i == 0){
+                    $temp_array[] = chr($ascii_code + 32);
+                }else{
+                    $temp_array[] = '_'.chr($ascii_code + 32);
+                }
+            }else{
+                $temp_array[] = $name[$i];
+            }
+        }
+        return implode('',$temp_array);
     }
     
     /**

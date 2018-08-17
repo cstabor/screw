@@ -47,15 +47,9 @@ class StrTest extends TestCase
     
     public function testRandom()
     {
-        
         $len = 16;
-        
         $str = Str::random($len);
-        
         $this->assertEquals(16, strlen($str), 'random error');
-        
-        println($str);
-        
     }
     
     public function testRandomDigit()
@@ -63,10 +57,7 @@ class StrTest extends TestCase
         
         $len = 5;
         $space = '0123456789';
-
         $ret = Str::randomByCharsSpace($len, $space);
-        println($ret);
-    
         $this->assertEquals($len, strlen($ret), 'random digit error');
         
     }
@@ -88,38 +79,22 @@ class StrTest extends TestCase
         
         $this->assertEquals($len, strlen($ret), 'random by space error');
     }
-    
-    public function testPrintln()
-    {
-        println(__FUNCTION__);
-    
-        $name = NULL;
-        println($name);
-        
-        $name = true;
-        println($name);
-    
-        $name = false;
-        println($name);
-    
-        $name = 1.23456;
-        println($name);
-    
-        $name = 123456;
-        println($name);
-    
-        $name = "that's a dog";
-        println($name);
-    
-        $name = fopen('/tmp/test.php', 'r');
-        println($name);
-    
-        $name = [1, 2, 3];
-        println($name);
-    
-        $name = new \stdClass();
-        $name->age = 5;
-        println($name);
-        
+
+    public function testToUpperCamelCase() {
+        $tmp = 'user_name';
+        $this->assertEquals('UserName', Str::toUpperCamelCase($tmp));
+    }
+
+    public function testToLowerCamelCase() {
+        $tmp = 'user_name';
+        $this->assertEquals('userName', Str::toLowerCamelCase($tmp));
+    }
+
+    public function testToSnakeCase() {
+        $tmp = 'userName';
+        $this->assertEquals('user_name', Str::toSnakeCase($tmp));
+
+        $tmp = 'UserName';
+        $this->assertEquals('user_name', Str::toSnakeCase($tmp));
     }
 }
